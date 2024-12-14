@@ -16,7 +16,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showProfile, setShowProfile] = useState(true);
-  const [dueDate, setDueDate] = useState("");
+  const [due_at, setDue_at] = useState("");
   const [showWorkReports, setShowWorkReports] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
   const [showProjects, setShowProjects] = useState(false);
@@ -65,20 +65,34 @@ const Profile = () => {
       setLoading(false);
     }
   };
-
   const handleAssignProject = async () => {
-    if (!projectTitle || !projectDescription) {
+    if (!projectTitle || !projectDescription || !due_at) {
       alert("Please fill in all fields!");
       return;
     }
-
+  
+    // Ensure the projectId is found
+    const projectId = projects.find((project) => project.project_title === projectTitle)?.id;
+    console.log("Project ID:", projectId); // Check if project ID is retrieved
+  
+    const assigneeId = member.id; // Ensure this is correctly set
+    console.log("Assignee ID:", assigneeId); // Check if assignee ID is retrieved
+  
+    // Check if both projectId and assigneeId are set
+    if (!projectId || !assigneeId) {
+      alert("Both project ID and assignee ID are required.");
+      return;
+    }
+  
     try {
       await api.post(
         `/assign-project/`,
         {
-          username,
-          title: projectTitle,
+          project_id: projectId,
+          assignee_id: assigneeId,
+          project_title: projectTitle,
           description: projectDescription,
+          due_at: due_at,
         },
         {
           headers: { Authorization: `Bearer ${authToken}` },
@@ -94,7 +108,8 @@ const Profile = () => {
       alert("Failed to assign project.");
     }
   };
-
+  
+  
   useEffect(() => {
     if (username) {
       fetchMemberData();
@@ -347,33 +362,49 @@ const Profile = () => {
         </>
       )}
 
-      {/* Modal for Assigning Project */}
+      {/* Modal for assigning project */}
       {showModal && (
         <div className="modal">
           <div className="modal-content">
-            <h3>Assign a Project</h3>
-            <label>Project Title:</label>
-            <input
-              type="text"
-              value={projectTitle}
-              onChange={(e) => setProjectTitle(e.target.value)}
-            />
-            <label>Project Description:</label>
-            <textarea
-              value={projectDescription}
-              onChange={(e) => setProjectDescription(e.target.value)}
-            ></textarea>
-            <label>Due Date:</label>
-            <input
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
+            <h2>Assign Project</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAssignProject();
+              }}
+            >
+              <label>Project Title:</label>
+              <input
+                type="text"
+                value={projectTitle}
+                onChange={(e) => setProjectTitle(e.target.value)}
+                required
+              />
 
-            <div className="modal-actions">
-              <button onClick={handleAssignProject}>Assign</button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-            </div>
+              <label>Project Description:</label>
+              <textarea
+                value={projectDescription}
+                onChange={(e) => setProjectDescription(e.target.value)}
+                required
+              />
+
+              <label>Due Date:</label>
+              <input
+                type="date"
+                value={due_at}
+                onChange={(e) => setDue_at(e.target.value)}
+                required
+              />
+
+              <button type="submit">Assign Project</button>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="cancel-btn"
+              >
+                Cancel
+              </button>
+            </form>
           </div>
         </div>
       )}

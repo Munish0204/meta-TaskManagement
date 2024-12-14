@@ -145,6 +145,67 @@ class CreateUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
+from .models import AssignedProject, Project
+from .serializers import AssignedProjectSerializer
+
+class AssignProjectView(APIView):
+    """
+    View to assign a project to a user.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project_id = request.data.get('project_id')
+        assignee_id = request.data.get('assignee_id')
+        
+        if not project_id or not assignee_id:
+            return Response(
+                {"error": "Both project_id and assignee_id are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Get the project and assignee from the database
+        project = get_object_or_404(Project, id=project_id)
+        assignee = get_object_or_404(User, id=assignee_id)
+
+        # Optional: Check if the project is already assigned
+        if AssignedProject.objects.filter(project=project, assignee=assignee).exists():
+            return Response(
+                {"error": "This project is already assigned to the user."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Create an AssignedProject instance
+        assigned_project = AssignedProject(
+            project=project,
+            assignee=assignee,
+            status='Pending'  # Default status
+        )
+        assigned_project.save()
+
+        # Serialize and return the response
+        serializer = AssignedProjectSerializer(assigned_project)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+    def get(self, request, *args, **kwargs):
+        user_id = request.user.id
+        
+        # Get all assigned projects for the authenticated user
+        assigned_projects = AssignedProject.objects.filter(assignee_id=user_id)
+
+        # Serialize the assigned projects
+        serializer = AssignedProjectSerializer(assigned_projects, many=True)
+        return Response(serializer.data)
+
+
+
 # Profile View (For both GET and POST requests)
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
