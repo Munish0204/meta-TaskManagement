@@ -172,7 +172,7 @@ class ProfileView(APIView):
             serializer = ProfileSerializer(profile, context={"request": request})
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Profile.DoesNotExist:
-            return Response({"error": "Profile does not exist"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": "Profile does not exist"}, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         """Create or update the profile for the authenticated user."""
