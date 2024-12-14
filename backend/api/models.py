@@ -46,21 +46,6 @@ class Project(models.Model):
     due_at = models.DateTimeField(null=True)
     proof = models.FileField(upload_to='projects/', null=True)
 
-class AssignedProject(Project):
-    assignee = models.ForeignKey(User, on_delete=models.CASCADE, related_name="assigned_projects", null=True)
-    assigned_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=50, choices=[
-        ('Pending', 'Pending'),
-        ('In Progress', 'In Progress'),
-        ('Completed', 'Completed'),
-    ], default='Pending')
-
-    class Meta:
-        verbose_name = "Assigned Project"
-        verbose_name_plural = "Assigned Projects"
-
-    def __str__(self):
-        return f"{self.project_title} - {self.assignee.username if self.assignee else 'Unassigned'}"
 
 # Profile Table
 class Profile(models.Model):

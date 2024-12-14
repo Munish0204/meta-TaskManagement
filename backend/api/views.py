@@ -148,63 +148,6 @@ class CreateUserView(generics.CreateAPIView):
 
 
 
-class AssignProjectView(APIView):
-    """
-    View to assign a project to a user.
-    """
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, *args, **kwargs):
-        project_id = request.data.get('project_id')
-        assignee_id = request.data.get('assignee_id')
-        
-        if not project_id or not assignee_id:
-            return Response(
-                {"error": "Both project_id and assignee_id are required."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        # Get the project instance
-        try:
-            project = Project.objects.get(id=project_id)
-        except Project.DoesNotExist:
-            return Response(
-                {"error": "Project does not exist."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        
-        # Get the assignee instance
-        assignee = get_object_or_404(User, id=assignee_id)
-
-        # Optional: Check if the project is already assigned
-        if AssignedProject.objects.filter(project_ptr_id=project.id, assignee=assignee).exists():
-            return Response(
-                {"error": "This project is already assigned to the user."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        # Create an AssignedProject instance
-        assigned_project = AssignedProject.objects.create(
-            project_ptr=project,
-            assignee=assignee,
-            status='Pending'  # Default status
-        )
-
-        # Serialize and return the response
-        serializer = AssignedProjectSerializer(assigned_project)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        
-    def get(self, request, *args, **kwargs):
-        user_id = request.user.id
-        
-        # Get all assigned projects for the authenticated user
-        assigned_projects = AssignedProject.objects.filter(assignee_id=user_id)
-
-        # Serialize the assigned projects
-        serializer = AssignedProjectSerializer(assigned_projects, many=True)
-        return Response(serializer.data)
-
 
 # Profile View (For both GET and POST requests)
 class ProfileView(APIView):
@@ -469,25 +412,24 @@ class ProjectView(APIView):
         due_at_str = request.data.get("due_at")  # due_at as a string
         proof = request.FILES.get("media")
 
+        # Check if username is provided
         if not username:
             return Response({"error": "Username is required"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Fetch the user instance
         user_instance = User.objects.filter(username=username).first()
-
         if not user_instance:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # If due_at is a string, convert it to a datetime object
+        # Validate due_at
+        due_at = None
         if due_at_str:
             try:
-                # Parse the string into a datetime object
-                due_at = datetime.fromisoformat(due_at_str)  # fromisoformat handles ISO 8601 format
+                due_at = datetime.fromisoformat(due_at_str)  # Parse the string into a datetime object
                 if timezone.is_naive(due_at):  # Check if it's naive (no timezone)
                     due_at = timezone.make_aware(due_at)  # Convert it to aware datetime
             except ValueError:
                 return Response({"error": "Invalid date format for 'due_at'"}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            due_at = None
 
         # Create the project report
         try:
@@ -514,4 +456,3 @@ class ProjectView(APIView):
         reports = Project.objects.filter(user=request.user).order_by("-id")
         serializer = ProjectSerializer(reports, many=True, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-

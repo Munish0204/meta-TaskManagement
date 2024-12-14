@@ -174,12 +174,6 @@ const Profile = () => {
             >
               Back
             </button>
-            <button
-              className="assign-project-btn"
-              onClick={() => setShowModal(true)}
-            >
-              Assign Project
-            </button>
           </div>
 
           <div className="profile-info">
@@ -395,53 +389,7 @@ const Profile = () => {
           <footer className="footer">
             <p>Created by <strong><span1>Muneeswaran </span1>& <span2>Sarweshwar...!</span2></strong></p>
           </footer>
-
-      {/* Modal for assigning project */}
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Assign Project</h2>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleAssignProject();
-              }}
-            >
-              <label>Project Title:</label>
-              <input
-                type="text"
-                value={projectTitle}
-                onChange={(e) => setProjectTitle(e.target.value)}
-                required
-              />
-
-              <label>Project Description:</label>
-              <textarea
-                value={projectDescription}
-                onChange={(e) => setProjectDescription(e.target.value)}
-                required
-              />
-
-              <label>Due Date:</label>
-              <input
-                type="date"
-                value={due_at}
-                onChange={(e) => setDue_at(e.target.value)}
-                required
-              />
-
-              <button type="submit">Assign Project</button>
-              <button
-                type="button"
-                onClick={() => setShowModal(false)}
-                className="cancel-btn"
-              >
-                Cancel
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+   
     </div>
   );
 };

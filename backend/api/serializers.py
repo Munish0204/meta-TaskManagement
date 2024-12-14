@@ -57,19 +57,14 @@ class WorkSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = "__all__"
     def get_media(self, obj):
         request = self.context.get('request')
         if obj.media and request:
             return request.build_absolute_uri(obj.media.url)
         return None
 
-class AssignedProjectSerializer(ProjectSerializer):
-    assignee = UserSerializer(read_only=True)
-    
-    class Meta:
-        model = AssignedProject
-        fields = ['id', 'project_title', 'description', 'created_at', 'due_at', 'proof', 'assignee', 'assigned_date', 'status']
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     media = serializers.SerializerMethodField()
