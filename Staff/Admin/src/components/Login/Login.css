@@ -77,10 +77,17 @@ body {
   box-shadow: 0 10px 20px rgba(0, 212, 255, 0.5); /* Subtle blue glow */
 }
 
-/* Footer Styles */
 .footer {
+  color: #bbb;
   text-align: center;
-  margin-top: 20px;
-  color: #666;
-  font-size: 0.9em;
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+span1{
+  color: #00c6ff;
+}
+
+span2{
+  color: #0072ff;
 }

@@ -33,7 +33,7 @@ const Login = ({ route = "token/", method = "login" }) => {
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
         localStorage.setItem("username", username); // Save username
-        navigate("/dashboard"); // Navigate to Profile or Home page after login
+        navigate("/"); // Navigate to Profile or Home page after login
       } else {
         setError("Unexpected error occurred. Please try again.");
       }

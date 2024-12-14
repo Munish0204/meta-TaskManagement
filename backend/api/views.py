@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import make_aware
 from datetime import datetime
+from django.utils import timezone
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
@@ -146,14 +147,6 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.models import User
-from .models import AssignedProject, Project
-from .serializers import AssignedProjectSerializer
 
 class AssignProjectView(APIView):
     """
@@ -170,29 +163,37 @@ class AssignProjectView(APIView):
                 {"error": "Both project_id and assignee_id are required."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        # Get the project and assignee from the database
-        project = get_object_or_404(Project, id=project_id)
+        
+        # Get the project instance
+        try:
+            project = Project.objects.get(id=project_id)
+        except Project.DoesNotExist:
+            return Response(
+                {"error": "Project does not exist."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Get the assignee instance
         assignee = get_object_or_404(User, id=assignee_id)
 
         # Optional: Check if the project is already assigned
-        if AssignedProject.objects.filter(project=project, assignee=assignee).exists():
+        if AssignedProject.objects.filter(project_ptr_id=project.id, assignee=assignee).exists():
             return Response(
                 {"error": "This project is already assigned to the user."},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
         # Create an AssignedProject instance
-        assigned_project = AssignedProject(
-            project=project,
+        assigned_project = AssignedProject.objects.create(
+            project_ptr=project,
             assignee=assignee,
             status='Pending'  # Default status
         )
-        assigned_project.save()
 
         # Serialize and return the response
         serializer = AssignedProjectSerializer(assigned_project)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         
     def get(self, request, *args, **kwargs):
         user_id = request.user.id
@@ -203,7 +204,6 @@ class AssignProjectView(APIView):
         # Serialize the assigned projects
         serializer = AssignedProjectSerializer(assigned_projects, many=True)
         return Response(serializer.data)
-
 
 
 # Profile View (For both GET and POST requests)
@@ -452,6 +452,13 @@ class ProjectDetailView(APIView):
         except Project.DoesNotExist:
             return Response({"error": "Report not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+
+class ProjectView(APIView):
+    permission_classes = [IsAuthenticated]
+from datetime import datetime
+from django.utils import timezone
+
 class ProjectView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -459,7 +466,7 @@ class ProjectView(APIView):
         username = request.data.get("username")
         project_title = request.data.get("title")
         description = request.data.get("description")
-        due_at = request.data.get("due_at")
+        due_at_str = request.data.get("due_at")  # due_at as a string
         proof = request.FILES.get("media")
 
         if not username:
@@ -470,9 +477,21 @@ class ProjectView(APIView):
         if not user_instance:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        # Create the work report
+        # If due_at is a string, convert it to a datetime object
+        if due_at_str:
+            try:
+                # Parse the string into a datetime object
+                due_at = datetime.fromisoformat(due_at_str)  # fromisoformat handles ISO 8601 format
+                if timezone.is_naive(due_at):  # Check if it's naive (no timezone)
+                    due_at = timezone.make_aware(due_at)  # Convert it to aware datetime
+            except ValueError:
+                return Response({"error": "Invalid date format for 'due_at'"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            due_at = None
+
+        # Create the project report
         try:
-            Project_report = Project.objects.create(
+            project_report = Project.objects.create(
                 user=user_instance,
                 username=username,
                 project_title=project_title,
@@ -481,12 +500,12 @@ class ProjectView(APIView):
                 proof=proof,
             )
         except Exception as e:
-            return Response({"error": f"Failed to create work report: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": f"Failed to create project: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Serialize and return the created work report
-        serializer = ProjectSerializer(Project_report, context={"request": request})
+        # Serialize and return the created project
+        serializer = ProjectSerializer(project_report, context={"request": request})
         return Response(
-            {"message": "Work report created successfully", "data": serializer.data},
+            {"message": "Project created successfully", "data": serializer.data},
             status=status.HTTP_201_CREATED,
         )
 
@@ -495,3 +514,4 @@ class ProjectView(APIView):
         reports = Project.objects.filter(user=request.user).order_by("-id")
         serializer = ProjectSerializer(reports, many=True, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+

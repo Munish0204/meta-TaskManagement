@@ -71,26 +71,13 @@ const Profile = () => {
       return;
     }
   
-    // Ensure the projectId is found
-    const projectId = projects.find((project) => project.project_title === projectTitle)?.id;
-    console.log("Project ID:", projectId); // Check if project ID is retrieved
-  
-    const assigneeId = member.id; // Ensure this is correctly set
-    console.log("Assignee ID:", assigneeId); // Check if assignee ID is retrieved
-  
-    // Check if both projectId and assigneeId are set
-    if (!projectId || !assigneeId) {
-      alert("Both project ID and assignee ID are required.");
-      return;
-    }
-  
     try {
-      await api.post(
-        `/assign-project/`,
+      // Step 1: Create the project
+      const createProjectResponse = await api.post(
+        `/project/`, // Replace with your actual API endpoint
         {
-          project_id: projectId,
-          assignee_id: assigneeId,
-          project_title: projectTitle,
+          username: username, // Ensure 'username' is properly defined
+          title: projectTitle,
           description: projectDescription,
           due_at: due_at,
         },
@@ -98,14 +85,57 @@ const Profile = () => {
           headers: { Authorization: `Bearer ${authToken}` },
         }
       );
+  
+      // Retrieve the project ID from the response
+      const projectId = createProjectResponse.data?.data?.id || createProjectResponse.data?.id; // Handle nested response
+      console.log("Created Project ID:", projectId);
+  
+      if (!projectId) {
+        alert("Failed to retrieve project ID.");
+        return;
+      }
+  
+      // Step 2: Assign the project
+      const assigneeId = createProjectResponse.data?.data?.user || createProjectResponse.data?.user;; // Assuming 'username' represents the assignee ID
+      console.log("Assignee ID:", assigneeId);
+  
+      if (!assigneeId) {
+        alert("Assignee ID is required.");
+        return;
+      }
+  
+      await api.post(
+        `/assign-project/`, // Replace with your actual API endpoint
+        {
+          username:username,
+          title: projectTitle,
+          description: projectDescription,
+          due_at: due_at,
+          project_id: projectId,
+          assignee_id: assigneeId,
+        },
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
+  
+      // Notify success
       alert("Project assigned successfully!");
+      
+      // Reset form fields and close modal
       setShowModal(false);
       setProjectTitle("");
       setProjectDescription("");
-      fetchMemberData(); // Refresh project data
+  
+      // Refresh the data
+      fetchMemberData();
     } catch (error) {
-      console.error("Error assigning project:", error);
-      alert("Failed to assign project.");
+      // Log and display error
+      console.error("Error during project creation or assignment:", error);
+  
+      // Provide detailed error feedback
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred.";
+      alert(`Failed to create and assign project: ${errorMessage}`);
     }
   };
   
@@ -361,6 +391,10 @@ const Profile = () => {
           </div>
         </>
       )}
+
+          <footer className="footer">
+            <p>Created by <strong><span1>Muneeswaran </span1>& <span2>Sarweshwar...!</span2></strong></p>
+          </footer>
 
       {/* Modal for assigning project */}
       {showModal && (
