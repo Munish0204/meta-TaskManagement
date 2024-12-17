@@ -36,7 +36,7 @@ const Profile = () => {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       setUserData({
-        name: response.data.name || response.data.user.username,
+        name: response.data.name || username,
         domain: response.data.domain || "No information provided",
         phone_no: response.data.phone_no || "No information provided",
         mail_id: response.data.mail_id || "No information provided",
@@ -66,19 +66,13 @@ const Profile = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64Image = reader.result; // Base64 string
-        setUserData({
-          ...userData,
-          profile_photo: base64Image,
-        });
-        localStorage.setItem("profile_photo", base64Image); // Store in localStorage
-      };
-      reader.readAsDataURL(file); // Convert file to Base64
+      setUserData({
+        ...userData,
+        profile_photo: file,
+      });
+      localStorage.setItem("profile_photo", URL.createObjectURL(file));
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -156,7 +150,7 @@ const Profile = () => {
               ))}
             </select>
           ) : (
-            <p>{userData.domain}</p>
+            <p><strong>Domain:</strong> {userData.domain}</p>
           )}
 
           {isEditing ? (
