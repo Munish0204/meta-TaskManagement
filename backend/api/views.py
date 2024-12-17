@@ -11,6 +11,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from rest_framework.decorators import api_view,permission_classes
 from .models import *
 from .serializers import *
 import re
@@ -456,3 +457,15 @@ class ProjectView(APIView):
         reports = Project.objects.filter(user=request.user).order_by("-id")
         serializer = ProjectSerializer(reports, many=True, context={"request": request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+from .utils import userdata
+from django.contrib.auth.models import User
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def Fake(request):
+    if request.method=="GET":
+        for i in userdata:
+            user = User.objects.create(username=i['username'],password=i['password'])
+            user.save()
+        return Response(userdata, status=status.HTTP_200_OK)
