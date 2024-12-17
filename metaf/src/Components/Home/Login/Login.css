@@ -78,6 +78,73 @@ body {
     box-shadow: 0 10px 20px rgba(0, 212, 255, 0.5); /* Subtle blue glow */
   }
   
-  /* Footer Styles */
+  @media (max-width: 600px) {
+    .login-card {
+        padding: 30px;
+        width: 90%;
+    }
+
+    .login-card h2 {
+        font-size: 1.6em;
+    }
+
+    .login-card input[type="text"],
+    .login-card input[type="password"] {
+        padding: 10px;
+        font-size: 0.9em;
+    }
+
+    .login-card button {
+        padding: 10px 18px;
+        font-size: 0.9em;
+    }
+}
+
+/* Medium Screens (tablets) */
+@media (max-width: 768px) {
+    .login-card {
+        padding: 35px;
+        width: 80%;
+    }
+
+    .login-card h2 {
+        font-size: 1.8em;
+    }
+
+    .login-card input[type="text"],
+    .login-card input[type="password"] {
+        padding: 11px;
+        font-size: 1em;
+    }
+
+    .login-card button {
+        padding: 11px 19px;
+        font-size: 1em;
+    }
+}
+
+/* Large Screens (desktops) */
+@media (min-width: 1024px) {
+    .login-card {
+        padding: 40px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .login-card h2 {
+        font-size: 2em;
+    }
+
+    .login-card input[type="text"],
+    .login-card input[type="password"] {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    .login-card button {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+}
   
   

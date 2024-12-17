@@ -48,7 +48,7 @@ p.loading {
   margin-bottom: 30px;
 }
 
-.profile-img{
+.profile-img {
   border-radius: 50%;
   width: 150px;
   height: 150px;
@@ -172,7 +172,7 @@ button:disabled {
   cursor: pointer;
 }
 
-.prjct-btn{
+.prjct-btn {
   position: absolute;
   padding: 1.5px 3px;
   margin-left: 460px;
@@ -184,7 +184,7 @@ button:disabled {
   cursor: pointer;
 }
 
-.wrk-btn{
+.wrk-btn {
   position: absolute;
   padding: 1.5px 3px;
   margin-left: 550px;
@@ -194,8 +194,6 @@ button:disabled {
   color: #ffff;
   cursor: pointer;
 }
-
-
 
 /* Modal overlay */
 .modal {
@@ -285,17 +283,12 @@ button:disabled {
   margin-top: 10px;
 }
 
-
-.assign-project-btn{
-  padding: 2.5px 5px;
-  margin-left: 550px;
-
-}
-
+/* Profile Info Animation */
 .profile-info {
   animation: slide-in 0.5s ease-out;
 }
 
+/* Footer */
 .footer {
   color: #bbb;
   text-align: center;
@@ -303,14 +296,16 @@ button:disabled {
   margin-top: auto;
 }
 
-span1{
+/* Footer Colors */
+span1 {
   color: #00c6ff;
 }
 
-span2{
+span2 {
   color: #0072ff;
 }
 
+/* Slide-in Animation */
 @keyframes slide-in {
   0% {
     transform: translateX(100%);
@@ -325,7 +320,7 @@ span2{
 /* Responsive Styling */
 @media (max-width: 768px) {
   .profile-container {
-    padding: 20px;
+    padding: 15px;
   }
 
   .profile-info {
@@ -344,5 +339,23 @@ span2{
 
   .section ul {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust grid for smaller screens */
+  }
+
+  .modal-content {
+    width: 95%;
+    max-width: 350px;
+  }
+
+  .toggle-btn,
+  .prjct-btn,
+  .wrk-btn {
+    font-size: 1.5rem;
+    margin-left: 20px;
+    margin-top: 5px;
+  }
+
+  .assign-project-btn {
+    margin-left: 10px;
+    padding: 2px 5px;
   }
 }

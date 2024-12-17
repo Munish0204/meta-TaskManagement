@@ -298,3 +298,101 @@ span2{
     transform: translateY(0);
   }
 }
+
+
+
+/* Responsive Media Queries */
+@media (max-width: 1200px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row for laptop screens */
+  }
+
+  .report-details-container {
+    padding: 0 5%;
+  }
+}
+
+@media (max-width: 992px) {
+  .cards-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row for tablet screens */
+  }
+
+  .workreport-container {
+    padding: 1.5rem;
+    margin: 2rem;
+  }
+
+  .report-media img {
+    max-width: 100%; /* Allow full width on smaller screens */
+  }
+
+  textarea {
+    height: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-container {
+    grid-template-columns: 1fr; /* 1 card per row for smaller tablets/large phones */
+  }
+
+  .workreport-container h2 {
+    font-size: 1.8rem;
+  }
+
+  textarea {
+    height: 100px;
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
+  .det {
+    font-size: 1.5rem;
+  }
+
+  .det_p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .workreport-container {
+    padding: 1rem;
+    margin: 1.5rem;
+  }
+
+  h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  textarea {
+    height: 90px;
+    font-size: 0.8rem;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .cards-container {
+    gap: 10px; /* Less gap for small screens */
+  }
+
+  .report-media {
+    gap: 10px; /* Adjust media spacing */
+  }
+
+  .report-media img {
+    max-width: 100%; /* Make images responsive */
+  }
+
+  .delete-btn {
+    font-size: 20px;
+  }
+}
+

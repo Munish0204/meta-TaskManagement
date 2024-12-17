@@ -91,3 +91,59 @@ span1{
 span2{
   color: #0072ff;
 }
+
+/* Media Queries for Responsiveness */
+
+/* For smaller screens (max-width: 768px) */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 50px;
+  }
+
+  .login-card {
+    padding: 30px;
+    max-width: 90%; /* Allow card to take more width on smaller screens */
+  }
+
+  .login-card h2 {
+    font-size: 1.5em;
+  }
+
+  .login-card input[type="text"],
+  .login-card input[type="password"] {
+    padding: 10px;
+    font-size: 0.9em;
+  }
+
+  .login-card button {
+    padding: 10px 15px;
+    font-size: 0.9em;
+  }
+}
+
+/* For very small screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 20px;
+  }
+
+  .login-card {
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .login-card h2 {
+    font-size: 1.2em;
+  }
+
+  .login-card input[type="text"],
+  .login-card input[type="password"] {
+    padding: 8px;
+    font-size: 0.8em;
+  }
+
+  .login-card button {
+    padding: 8px 12px;
+    font-size: 0.8em;
+  }
+}

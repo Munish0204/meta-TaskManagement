@@ -29,7 +29,7 @@ a {
   align-items: center;
   justify-content: center;
   height: 70vh;
-  background: url('../../assets/home.jpg') center/cover no-repeat; /* Replace with your image URL */
+  background: url('../../assets/home.jpg') center/cover no-repeat;
   text-align: center;
   color: #fff;
   overflow: hidden;
@@ -114,9 +114,9 @@ a {
 }
 
 .club-card:hover {
-  background-color: #1a1a1a; /* Subtle background change */
-  transform: scale(1.05); /* Slight scaling on hover */
-  box-shadow: 0 10px 20px rgba(0, 212, 255, 0.5); /* Subtle blue glow */
+  background-color: #1a1a1a;
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 212, 255, 0.5);
 }
 
 .club-card h3 {
@@ -146,8 +146,6 @@ span2{
   color: #0072ff;
 }
 
-
-
 /* Keyframes for Animations */
 @keyframes fadeIn {
   0% { opacity: 0; }
@@ -173,5 +171,69 @@ span2{
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Responsive Styles for Different Screen Sizes */
+
+/* Small Screens (phones) */
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero p {
+    font-size: 1rem;
+  }
+
+  .cta-button {
+    padding: 0.6rem 1.5rem;
+  }
+
+  .clubs-heading h2 {
+    font-size: 2rem;
+  }
+
+  .club-card {
+    max-width: 90%;
+    padding: 1rem;
+  }
+}
+
+/* Medium Screens (tablets) */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 3rem;
+  }
+
+  .hero p {
+    font-size: 1.2rem;
+  }
+
+  .cta-button {
+    padding: 0.7rem 1.8rem;
+  }
+
+  .club-card {
+    max-width: 45%;
+  }
+}
+
+/* Large Screens (desktops) */
+@media (min-width: 1024px) {
+  .hero h1 {
+    font-size: 4rem;
+  }
+
+  .hero p {
+    font-size: 1.5rem;
+  }
+
+  .cta-button {
+    padding: 1rem 2.5rem;
+  }
+
+  .club-card {
+    max-width: 30%;
   }
 }

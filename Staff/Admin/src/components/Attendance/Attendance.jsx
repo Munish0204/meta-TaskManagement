@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api"; // Assuming `api` is set up for axios or fetch requests
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useNavigate } from "react-router-dom"; 
+import "./Attendance.css"
 
 function Attendance() {
   const [attendanceData, setAttendanceData] = useState([]);
@@ -109,40 +110,24 @@ function Attendance() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="attendance-container">
       {/* Back Button */}
       <button
         onClick={() => navigate(-1)} // Go to the previous page
-        style={{
-          padding: "10px 20px",
-          marginBottom: "20px",
-          backgroundColor: "#4CAF50",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
+        className="back-button"
       >
         Back
       </button>
 
       <h1>Attendance Details</h1>
 
-      <div style={{ marginBottom: "20px", display: "flex", gap: "20px" }}>
+      <div className="filters">
         <div>
-          <label htmlFor="name-dropdown" style={{ marginRight: "10px" }}>
-            Select Name:
-          </label>
+          <label htmlFor="name-dropdown">Select Name:</label>
           <select
             id="name-dropdown"
             value={selectedName}
             onChange={handleNameSelection}
-            style={{
-              padding: "8px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              width: "200px",
-            }}
           >
             <option value="">All Users</option>
             {uniqueNames.map((name, index) => (
@@ -154,53 +139,31 @@ function Attendance() {
         </div>
 
         <div>
-          <label htmlFor="start-date-filter" style={{ marginRight: "10px" }}>
-            Start Date:
-          </label>
+          <label htmlFor="start-date-filter">Start Date:</label>
           <input
             type="date"
             id="start-date-filter"
             value={selectedStartDate}
             onChange={handleStartDateChange}
-            style={{
-              padding: "8px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-            }}
           />
         </div>
 
         <div>
-          <label htmlFor="end-date-filter" style={{ marginRight: "10px" }}>
-            End Date:
-          </label>
+          <label htmlFor="end-date-filter">End Date:</label>
           <input
             type="date"
             id="end-date-filter"
             value={selectedEndDate}
             onChange={handleEndDateChange}
-            style={{
-              padding: "8px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-            }}
           />
         </div>
 
         <div>
-          <label htmlFor="session-dropdown" style={{ marginRight: "10px" }}>
-            Select Session:
-          </label>
+          <label htmlFor="session-dropdown">Select Session:</label>
           <select
             id="session-dropdown"
             value={selectedSession}
             onChange={handleSessionSelection}
-            style={{
-              padding: "8px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              width: "200px",
-            }}
           >
             <option value="">All Sessions</option>
             {uniqueSessions.map((session, index) => (
@@ -212,53 +175,45 @@ function Attendance() {
         </div>
       </div>
 
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr>
-            <th style={tableHeaderStyle}>Name</th>
-            <th style={tableHeaderStyle}>Latitude</th>
-            <th style={tableHeaderStyle}>Longitude</th>
-            <th style={tableHeaderStyle}>Time</th>
-            <th style={tableHeaderStyle}>Session</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredData.length > 0 ? (
-            filteredData.map((attendance, index) => (
-              <tr key={index} style={{ backgroundColor: getRowColor(attendance.session) }}>
-                <td style={tableCellStyle}><strong>{attendance.name}</strong></td>
-                <td style={tableCellStyle}><strong>{attendance.latitude}</strong></td>
-                <td style={tableCellStyle}><strong>{attendance.longitude}</strong></td>
-                <td style={tableCellStyle}><strong>{new Date(attendance.time).toLocaleString()}</strong></td>
-                <td style={tableCellStyle}><strong>{attendance.session}</strong></td>
-              </tr>
-            ))
-          ) : (
+      <div className="table-container">
+        <table>
+          <thead>
             <tr>
-              <td colSpan="5" style={tableCellStyle}>No data available</td>
+              <th>Name</th>
+              <th>Latitude</th>
+              <th>Longitude</th>
+              <th>Time</th>
+              <th>Session</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredData.length > 0 ? (
+              filteredData.map((attendance, index) => (
+                <tr
+                  key={index}
+                  style={{ backgroundColor: getRowColor(attendance.session) }}
+                >
+                  <td>{attendance.name}</td>
+                  <td>{attendance.latitude}</td>
+                  <td>{attendance.longitude}</td>
+                  <td>{new Date(attendance.time).toLocaleString()}</td>
+                  <td>{attendance.session}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="5">No data available</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
       <footer className="footer">
             <p>Created by <strong><span1>Muneeswaran </span1>& <span2>Sarweshwar...!</span2></strong></p>
           </footer>
     </div>
   );
 }
-
-const tableHeaderStyle = {
-  padding: "10px",
-  backgroundColor: "#000",
-  color: "#fff",
-  textAlign: "left",
-  borderBottom: "1px solid #333",
-};
-
-const tableCellStyle = {
-  color: "#000",
-  padding: "8px",
-  border: "1px solid #333",
-};
 
 export default Attendance;
