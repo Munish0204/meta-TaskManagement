@@ -45,10 +45,6 @@ const Profile = () => {
         about: response.data.about || "No information provided",
         profile_photo: response.data.profile_photo,
       });
-
-      if (response.data.profile_photo) {
-        localStorage.setItem("profile_photo", response.data.profile_photo);
-      }
     } finally {
       setIsLoading(false);
     }
@@ -70,13 +66,19 @@ const Profile = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setUserData({
-        ...userData,
-        profile_photo: file,
-      });
-      localStorage.setItem("profile_photo", URL.createObjectURL(file));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result; // Base64 string
+        setUserData({
+          ...userData,
+          profile_photo: base64Image,
+        });
+        localStorage.setItem("profile_photo", base64Image); // Store in localStorage
+      };
+      reader.readAsDataURL(file); // Convert file to Base64
     }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
