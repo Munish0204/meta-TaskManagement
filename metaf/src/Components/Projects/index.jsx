@@ -81,8 +81,9 @@ const ProjectReport = () => {
   });
 
   return (
+    <>
+    <Navbar />
     <div className="ProjectReport-container">
-      <Navbar />
       <h2>Project Report</h2>
 
       <UploadForm onSubmit={handleSubmit} loading={loading} />
@@ -159,9 +160,11 @@ const ProjectReport = () => {
         )}
       </div>
       <footer className="footer">
-            <p>Created by <strong><span1>Muneeswaran </span1>& <span2>Sarweshwar...!</span2></strong></p>
+            {/* <p>Created by <strong><span1>Muneeswaran </span1>& <span2>Sarweshwar...!</span2></strong></p> */}
           </footer>
     </div>
+    </>
+    
   );
 };
 

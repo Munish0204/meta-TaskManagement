@@ -15,9 +15,11 @@ function App() {
   };
 
   return (
-  
+    <>
+    <Navbar />
     <div className="homepage">
-      <Navbar /> {}
+      
+       {}
       {isLoginVisible ? (
         <Login onBack={handleBackClick} /> // Render the login page if visible
       ) : (
@@ -66,6 +68,8 @@ function App() {
         </>
       )}
     </div>
+    </>
+
   );
 }
 

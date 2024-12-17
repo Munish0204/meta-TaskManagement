@@ -13,6 +13,7 @@
 
 /* Card Styling */
 .attendance-card {
+  margin-top: 10rem;
   background: rgba(40, 40, 40, 0.9); /* Dark grey background */
   border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
   padding: 2rem;

@@ -83,8 +83,9 @@ const Course = () => {
   });
 
   return (
+    <>
+    <Navbar />
     <div className="workreport-container">
-      <Navbar />
       <h2>Course Report</h2>
 
       <UploadForm onSubmit={handleSubmit} loading={loading} />
@@ -168,6 +169,7 @@ const Course = () => {
             <p>Created by <strong><span1>Muneeswaran </span1>& <span2>Sarweshwar...!</span2></strong></p>
           </footer>
     </div>
+    </>
   );
 };
 

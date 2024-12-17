@@ -142,8 +142,10 @@ const Attendance = () => {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="attendance-page">
-      <Navbar />
+      
       <div className="attendance-card">
         <h1>Mark Your Attendance</h1>
         <button
@@ -178,6 +180,7 @@ const Attendance = () => {
           </footer>
 
     </div>
+    </>
   );
 };
 

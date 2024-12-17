@@ -1,130 +1,90 @@
+/* Navbar Base Styles */
+.navcon{
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
 .navbar {
+  z-index: 666;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-image: linear-gradient(to right, rgb(17, 24, 39), rgb(0, 0, 0));
   padding: 1rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  max-width: 100%;
+  background-color: #333;
+  color: #fff;
 }
 
-.navbar .logo {
-  font-size: 1.8rem;
+.logo {
+  font-size: 1.5rem;
   font-weight: bold;
-  color: white;
+  color: #fff;
   text-decoration: none;
-  margin-right: 2rem;
-  transition: transform 0.3s;
 }
 
-.navbar ul {
-  list-style-type: none;
+.nav-links {
   display: flex;
-  margin: 0;
-  padding: 0;
+  list-style: none;
+  gap: 1.5rem;
 }
 
-.navbar ul li {
-  margin: 0 1.5rem; /* Equal spacing between list items */
-  position: relative;
-}
-
-.navbar ul li a {
-  color: white;
+.nav-links li a {
+  color: #fff;
   text-decoration: none;
-  font-size: 1.2rem;
-  padding: 0.5rem 0;
-  transition: color 0.3s;
-}
-
-.navbar ul li a::after {
-  content: '';
-  display: block;
-  width: 0;
-  height: 2px;
-  background: red; /* Red underline */
-  transition: width 0.3s;
-  position: absolute;
-  left: 50%;
-  bottom: -5px;
-  transform: translateX(-50%);
-}
-
-.navbar ul li a:hover {
-  color: #ffcc00;
-}
-
-.navbar ul li a:hover::after {
-  width: 100%; /* Expand underline on hover */
+  font-size: 1rem;
 }
 
 .logout {
+  background-color: #ff4d4d;
   color: white;
-  text-decoration: none;
-  font-size: 1.2rem;
   padding: 0.5rem 1rem;
-  transition: color 0.3s, border-bottom 0.3s;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 1rem;
 }
 
 .logout:hover {
-  color: #ffcc00;
-  border-bottom: 2px solid red; /* Red underline on hover */
+  background-color: #ff1a1a;
 }
 
-/* Navbar Styles */
-.navbar {
-  position: fixed; /* Fix the navbar at the top */
-  top: 0;
-  left: 0;
-  width: 100%; /* Make it span the full width */
-  background-color: rgba(0, 0, 0, 0.8); /* Add a translucent background */
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000; /* Ensure it stays above other content */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); /* Optional shadow for aesthetics */
-  max-height: 10vh;
-}
-
-.navbar a {
+/* Responsive Styles */
+.menu-toggle {
+  width: 60px;
+  display: none;
+  background: none;
+  border: none;
   color: #fff;
-  text-decoration: none;
-  margin: 0 1rem;
-  font-size: 1.2rem;
-  transition: color 0.3s;
-}
-
-.navbar a:hover {
-  color: #00d4ff;
-}
-
-.navbar-logo {
   font-size: 1.5rem;
-  font-weight: bold;
+  cursor: pointer;
 }
 
-.navbar-links {
+
+.nav-links.active {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  background-color: #333;
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
+.nav-links.active li {
+  margin: 0.5rem 0;
+}
+
+/* Media Queries */
 @media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    padding: 0.5rem;
+  .nav-links {
+    display: none;
   }
 
-  .navbar-links {
-    flex-direction: column;
-    margin-top: 1rem;
+  .menu-toggle {
+    display: block;
   }
 
-  .navbar a {
-    margin: 0.5rem 0;
+  .logout {
+    display: none; /* Optional: hide the logout button on smaller screens */
   }
 }
