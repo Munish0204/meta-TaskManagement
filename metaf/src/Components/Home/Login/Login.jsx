@@ -19,7 +19,7 @@ const Login = ({ route = "user-token/", method = "login" }) => {
     }
   }, [navigate]);
 
-  const name = method === "login" ? "Login" : "Register";
+  const name = method = "Login";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

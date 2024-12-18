@@ -19,11 +19,6 @@ function Logout() {
   return <Navigate to="/login" />;
 }
 
-// Register and Logout Route (if needed)
-function RegisterAndLogout() {
-  localStorage.clear();
-  return <Navigate to="/register" />;
-}
 
 // App Component
 function App() {
@@ -107,7 +102,7 @@ function App() {
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/register" element={<RegisterAndLogout />} />
+      
 
         {/* 404 Not Found Route */}
         <Route path="*" element={<NotFound />} />
