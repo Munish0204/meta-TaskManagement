@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Dashboard from "./components/Dashboard/Dashboard";  
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -9,6 +9,11 @@ import Attendance from "./components/Attendance/Attendance";
 import Course from "./components/pages/course";
 import project from "./components/pages/project";
 import report from "./components/pages/work-report";
+
+function Logout(){
+  localStorage.clear();
+  return <Navigate to ="/login" />
+}
 
 function App() {
 
@@ -67,7 +72,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
-
+        <Route path="/logout" element={<Logout />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
